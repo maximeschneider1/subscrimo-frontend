@@ -1,16 +1,26 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthContextProvider } from './components/Utils/AuthContext';
 
 import './App.css';
-import logo from './logo.svg';
 
-import HomePage from './components/Home';
+import Hello from './components/Hello';
+import Layout from './components/Layout';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <HomePage />
-    </div>
+    <Router>
+      <div className="App">
+        <AuthContextProvider>
+          <Routes>
+            <Route path="/hello" element={<Hello />} />
+            <Route path="/" element={<Layout />} />
+            
+          </Routes>
+        </AuthContextProvider>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

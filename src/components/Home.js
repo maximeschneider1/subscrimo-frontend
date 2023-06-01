@@ -1,100 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import SubscriptionCard from './SubscriptionCard';
+import { AuthContext } from './Utils/AuthContext';
 
-import InfiniteScroll from './InfiniteScroll/InfiniteScroll';
+function Home() {
+  const [subscriptions, setSubscriptions] = useState([]);
+  const { state } = React.useContext(AuthContext);
 
-function HomePage(props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/subscriptions', {
+          headers: {
+            'Authorization': `Bearer ${state?.user?.accessToken}`
+          },
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setSubscriptions(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
 
-  function handleAboutClick() {
-    // Scroll to the About section
-  }
+    if(state?.user) {
+      fetchSubscriptions();
+    }
+  }, [state?.user]);
 
-  function handleContactClick() {
-    // Scroll to the Contact section
-  }
-
-  function handleModalOpen() {
-    setIsModalOpen(true);
-  }
-
-  function handleModalClose() {
-    setIsModalOpen(false);
-  }
-
-  // onClick={handleModalOpen}
+  if (!state.user) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen">
-
-      <nav class="flex justify-between px-20 py-10 items-center bg-white">
-  <h1 class="text-xl text-gray-800 font-bold">Subscrimo</h1>
-  <div class="flex items-center">
-    <div class="flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pt-0.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-      <input class="ml-2 outline-none bg-transparent font-" type="text" name="search" id="search" placeholder="Search..." />
-    </div>
-    <ul class="flex items-center space-x-6">
-      <li onClick={handleAboutClick} class="font-semibold text-gray-700">Home</li>
-      <li onClick={handleContactClick} class="font-semibold text-gray-700">Articles</li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path d="M12 14l9-5-9-5-9 5 9 5z" />
-          <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-        </svg>
-      </li>
-      <li onClick={handleModalOpen}>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-6xl font-bold mb-4">Sort All Subs. Now</h1>
-        <button onClick={handleModalOpen} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Connect</button>
-      </div>
-
-      <InfiniteScroll></InfiniteScroll>
-
-      <div className="grid grid-cols-3 gap-4 p-8">
-        {/* Add images side by side */}
-      </div>
-
-      <div className="flex items-center p-8">
-        <img src="about-image.jpg" alt="About" className="w-1/2 h-auto" />
-        <div className="about-text w-1/2 pl-8">
-          {/* Add a clear explanation of the concept */}
-        </div>
-      </div>
-
-      <div className="flex items-center p-8">
-        <div className="contact-text w-1/2 pr-8">
-          {/* Add a short contact text */}
-        </div>
-        <img src="contact-image.jpg" alt="Contact" className="w-1/2 h-auto" />
-      </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          {/* Add OAuth2 modal implementation */}
-          <div className="bg-white p-8 rounded">
-            {/* OAuth2 content */}
-            <button onClick={handleModalClose} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-          </div>
-        </div>
-      )}
+<div className="my-component">
+      <h1>Welcome, {state.user?.name}!</h1>
+      <p>Your email: {state.user?.email}</p>
+      <SubscriptionCard /> 
     </div>
   );
 }
 
-export default HomePage;
+export default Home;
