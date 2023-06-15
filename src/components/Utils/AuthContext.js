@@ -13,7 +13,10 @@ export const AuthContextProvider = (props) => {
   useEffect(() => {
     const getUser = () => { 
       fetch(`${process.env.REACT_APP_BACKEND_URL}/api/checkAuth`, 
-      { credentials: 'include' }
+      { 
+        credentials: 'include', 
+        withCredentials: true,
+       }
       ) 
         .then((response) => response.json())
         .then((data) => {
