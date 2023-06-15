@@ -5,7 +5,7 @@ function Header({ onAboutClick, onContactClick }) {
   const { state, updateState } = useContext(AuthContext);
 
   const handleLoginClick = () => {
-    window.open('http://localhost:3001/auth/google', '_blank');
+    window.open(`${process.env.REACT_APP_BACKEND_URL}/auth/google`, '_blank');
   };
 
   const handleLogoutClick = () => {

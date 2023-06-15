@@ -9,7 +9,7 @@ function Home() {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/subscriptions', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions`, {
           headers: {
             'Authorization': `Bearer ${state?.user?.accessToken}`
           },
@@ -36,7 +36,8 @@ function Home() {
 <div className="my-component">
       <h1>Welcome, {state.user?.name}!</h1>
       <p>Your email: {state.user?.email}</p>
-      <SubscriptionCard /> 
+      <SubscriptionCard /> {/* Use the component */}
+      {/* Add more user-specific features as needed */}
     </div>
   );
 }

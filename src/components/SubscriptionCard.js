@@ -49,7 +49,7 @@ function SubscriptionCard() {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/subscriptions?limit=50`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions?limit=50`, {
           headers: {
             'Authorization': `Bearer ${user?.accessToken}`
           },
@@ -71,7 +71,7 @@ function SubscriptionCard() {
   useEffect(() => {
     const fetchMoreSubscriptions = async () => {
       if (!nextPageToken) return;
-      const response = await fetch(`http://localhost:3001/api/subscriptions?pageToken=${nextPageToken}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions?pageToken=${nextPageToken}`, {
         headers: {
           'Authorization': `Bearer ${user?.accessToken}`
         },
